@@ -1,0 +1,13 @@
+{
+    "$schema": "https://on.cypress.io/cypress.schema.json",
+    "baseUrl": "https://www2.libreview.com/chooseCountryLanguage",
+    "defaultCommandTimeout": 10000,
+    "pageLoadTimeout": 100000,
+    "env": {
+        "username": "foolbrothersinvest@gmail.com",
+        "password": "P@ssword2468"
+    },
+    "retries": 3,
+    "chromeWebSecurity": false,
+    "video": false
+}

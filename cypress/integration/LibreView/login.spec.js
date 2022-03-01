@@ -2,13 +2,18 @@
 describe("Loging into LibreView using 2FA", () =>{
 
     beforeEach( () => {
+        cy.clearCookies();
+        cy.clearLocalStorage();
         cy.visit("/");
 
     });
     
     it("login to libreview and verify the upload button", () => {
         
-        //select country and lanuage
+       //cy.GetVerificationCode();
+        
+       
+       //select country and lanuage
         cy.get('#country-select').select('United States');
         cy.get('#language-select').select('English');
         cy.get('#submit-button').click({force : true});       
@@ -24,8 +29,14 @@ describe("Loging into LibreView using 2FA", () =>{
 
         // send and enter the verfication code
         cy.get('#twoFactor-step1-next-button').click({force: true});
-        cy.get('#twoFactor-step2-code-input').type('123456');
-        cy.get('#twoFactor-step2-next-button').click({force: true});
+        cy.wait(10000);*/
+        cy.GetVerificationCode()
+            .then(value =>{
+                cy.log("Verification Code:"+ value);
+                cy.get('#twoFactor-step2-code-input').type(value);
+                cy.get('#twoFactor-step2-next-button').click({force: true});
+            })
+        
 
         //confirm browser has redirected successfully
         cy.location('pathname').should('eq', '/meter');

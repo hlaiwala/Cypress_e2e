@@ -23,3 +23,59 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('GetVerificationCode', GetVerificationCode);
+
+function GetVerificationCode(){
+    var searchItem = 'subject:LibreView Verification Code';
+    var snippet = "";
+
+    cy.request({
+        method: 'POST',
+        url: 'https://accounts.google.com/o/oauth2/token',
+        form: true,
+        body:{
+            client_id:
+          "1080712786914-bq05escecffjaq346n88p82pujctn7gk.apps.googleusercontent.com",
+        client_secret: "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",
+        refresh_token:
+          "1//06VecS1b-0gt8CgYIARAAGAYSNwF-L9IrKbxPWjpbfK2rt4uJ6V-qmOVHPdy2iIw-uhdyP80ofgcUhD9NLra1nOvj0raeMcGPVpY",
+        grant_type: "refresh_token",
+        }
+    }).then(response => {
+        const token =  response.body.access_token;
+        // cy.log(JSON.stringify(response));
+        // cy.log(response.body.access_token);
+        // cy.log("Variable:"+token);
+
+        cy.request({
+            method: 'GET',
+            url: 'https://www.googleapis.com/gmail/v1/users/me/messages?q='+searchItem,
+            headers: {
+                'Authorization': 'Bearer '+ response.body.access_token
+            }
+        }).then(response => {
+            // cy.log(JSON.stringify(response));
+            // cy.log(response.body.messages[0].id);
+
+            cy.request({
+                method: 'GET',
+            url: 'https://www.googleapis.com/gmail/v1/users/me/messages/'+response.body.messages[0].id,
+            headers: {
+                'Authorization': 'Bearer '+ token
+            }
+            }).then(response => {
+                snippet = response.body.snippet;
+                String(snippet).substring(
+                    snippet.indexOf(':') + 1,
+                    snippet.lastIndexOf('T')
+                )
+                // cy.log(JSON.stringify(response));
+                 cy.log("Snippet is: " + snippet);
+                               
+            })
+
+        })
+    })
+    return cy.wrap(snippet);
+}

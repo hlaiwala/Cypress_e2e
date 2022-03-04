@@ -18,18 +18,18 @@ describe("Loging into LibreView using 2FA", () =>{
         cy.get('#language-select').select('English');
         cy.get('#submit-button').click({force : true});       
 
-        //input usernme and password
+        // //input usernme and password
         cy.get('#loginForm-email-input').type(Cypress.env('username'));
         cy.get('#loginForm-password-input').type(Cypress.env('password'));
         cy.get('#loginForm-submit-button').click({force : true});
 
-        // confirm browser has redirected successfully
-        cy.location('pathname').should('eq' , '/auth/finishlogin');
+        // // confirm browser has redirected successfully
+        // //cy.location('pathname').should('eq' , '/auth/finishlogin');
 
 
-        // send and enter the verfication code
-        cy.get('#twoFactor-step1-next-button').click({force: true});
-        cy.wait(10000);*/
+        // // send and enter the verfication code
+        // cy.get('#twoFactor-step1-next-button').click({force: true});
+        // cy.wait(10000);
         cy.GetVerificationCode()
             .then(value =>{
                 cy.log("Verification Code:"+ value);

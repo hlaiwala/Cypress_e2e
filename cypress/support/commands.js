@@ -30,7 +30,7 @@ function GetVerificationCode(){
     var searchItem = 'subject:LibreView Verification Code';
     var snippet = "";
 
-    cy.request({
+   return  cy.request({
         method: 'POST',
         url: 'https://accounts.google.com/o/oauth2/token',
         form: true,
@@ -48,7 +48,7 @@ function GetVerificationCode(){
         // cy.log(response.body.access_token);
         // cy.log("Variable:"+token);
 
-        cy.request({
+       return cy.request({
             method: 'GET',
             url: 'https://www.googleapis.com/gmail/v1/users/me/messages?q='+searchItem,
             headers: {
@@ -58,7 +58,7 @@ function GetVerificationCode(){
             // cy.log(JSON.stringify(response));
             // cy.log(response.body.messages[0].id);
 
-            cy.request({
+           return cy.request({
                 method: 'GET',
             url: 'https://www.googleapis.com/gmail/v1/users/me/messages/'+response.body.messages[0].id,
             headers: {
@@ -66,16 +66,12 @@ function GetVerificationCode(){
             }
             }).then(response => {
                 snippet = response.body.snippet;
-                String(snippet).substring(
-                    snippet.indexOf(':') + 1,
-                    snippet.lastIndexOf('T')
-                )
-                // cy.log(JSON.stringify(response));
-                 cy.log("Snippet is: " + snippet);
-                               
-            })
+                const code = snippet.match(/(?!Your security Code is )\d+/);
+                cy.log("Snippet is: " + code);
+                return cy.wrap(code);
 
+            })
         })
     })
-    return cy.wrap(snippet);
+    
 }

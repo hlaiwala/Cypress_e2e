@@ -7,7 +7,7 @@
         "username": "foolbrothersinvest@gmail.com",
         "password": "P@ssword2468"
     },
-    "retries": 3,
+    "retries": 1,
     "chromeWebSecurity": false,
     "video": false
 }

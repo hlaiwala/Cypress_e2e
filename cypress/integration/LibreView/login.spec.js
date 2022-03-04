@@ -23,9 +23,13 @@ describe("Loging into LibreView using 2FA", () =>{
         cy.get('#loginForm-password-input').type(Cypress.env('password'));
         cy.get('#loginForm-submit-button').click('right', {force : true});
 
-        // // confirm browser has redirected successfully
-        // //cy.location('pathname').should('eq' , '/auth/finishlogin');
 
+        //Click on Send Code button 
+        cy.get('#twoFactor-step1-next-button').click('right', {force :  true});
+        cy.wait(1000);
+
+        // // confirm browser has redirected successfully
+        cy.location('pathname').should('eq' , '/auth/finishlogin');
 
         // // send and enter the verfication code
         // cy.get('#twoFactor-step1-next-button').click({force: true});
@@ -33,7 +37,7 @@ describe("Loging into LibreView using 2FA", () =>{
         cy.GetVerificationCode()
             .then(value =>{
                 cy.log("Verification Code:"+ value);
-                cy.get('#twoFactor-step2-code-input').type(value);
+                cy.get('#twoFactor-step2-code-input').type(String(value));
                 cy.get('#twoFactor-step2-next-button').click({force: true});
             })
         
